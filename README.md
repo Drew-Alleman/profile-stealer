@@ -19,7 +19,10 @@ We can launch multiple headless Chromium browsers pointing to the local database
 ## Execution Spawning Methods
 ### Windows
 #### ShellExecuteEx
+Launches the browser through the Windows Shell ([ShellExecuteEx](https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecuteexa) with the "open" verb), mimicking the Explorer double-click flow so file associations are honored. 
+
 #### CreateProcessW
+Uses [CreateProcessW](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw) to start the browser process.
 
 ### Linux
 #### X
@@ -28,5 +31,13 @@ We can launch multiple headless Chromium browsers pointing to the local database
 ## Termination Methods
 ### Windows
 #### TerminateProcess
+Uses [TerminateProcess](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess) to kill the spawned chromium process.
+
+```C++
+BOOL TerminateProcess(
+  [in] HANDLE hProcess,
+  [in] UINT   uExitCode
+);
+```
 ### Linux
 #### X
