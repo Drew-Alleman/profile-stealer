@@ -1,5 +1,5 @@
 # profile-stealer
-Chromium browsers leave database files in the users AppData folder these cointain information such as History, Login Data (encrypted), and auto-fill entries. These files are heavily monitored by AV and EDR products. This repository implements two different simular methods to automate the stealing of these files without tripping any detections on windows linux and MacOS.
+Chromium browsers leave database files in the users AppData folder these cointain information such as History, Login Data (encrypted), and auto-fill entries. These files are heavily monitored by AV and EDR products. This repository implements two different but simular methods to automate the stealing of these files without tripping any detections on windows linux and MacOS.
 
 ## Customizing Execution Workflow
 You can use the `build.py` python script to generate the output executable this allows you to customize the following features:
