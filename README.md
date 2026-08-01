@@ -16,7 +16,7 @@ The build.py script acts as a compile-time modular injector. It auto-detects the
 - Bypass methods (CDP, windowspos, ozone)
 - Process launchers
 - Process terminators
-- Sleep timing & jitter
+- Sleep timing & jitter, and implementation
 
 ---
 
@@ -72,6 +72,84 @@ cmake --version
 g++ --version
 ```
 
+## Execution Spawning Methods (Launchers)
+
+| Platform | Method | Description |
+|----------|--------|-------------|
+| **Windows** | `ShellExecuteEx` | Launches the browser through the Windows Shell ([ShellExecuteEx](https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecuteexa)) with the "open" verb |
+| **Windows** | `CreateProcessW` | Uses [CreateProcessW](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw) to start the browser process |
+| **Linux** | `posix_spawn` | Spawns the process with [posix_spawn](https://man7.org/linux/man-pages/man3/posix_spawn.3.html) |
+
+Select the method at build time with `-L`:
+
+```bash
+# Windows
+python build.py -L CreateProcessW
+python build.py -L ShellExecuteEx
+
+# Linux
+python3 build.py -L posix_spawn
+```
+
+---
+
+## Termination Methods
+
+| Platform | Method | Description |
+|----------|--------|-------------|
+| **Windows** | `TerminateProcess` | Uses the Windows [TerminateProcess](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess) API |
+| **Linux** | `sigkill` | Sends `SIGKILL` using the Linux [kill](https://man7.org/linux/man-pages/man2/kill.2.html) function |
+
+Select the method at build time with `-T`:
+
+```bash
+# Windows
+python build.py -T TerminateProcess
+
+# Linux
+python3 build.py -T sigkill
+```
+
+---
+
+## Sleep Settings
+
+### Timing & Jitter
+
+Control the delay between downloads with:
+
+- `-M` → base sleep in milliseconds
+- `-J` → jitter percentage
+
+**Example:**
+```bash
+python build.py -J 50 -M 1000
+```
+
+This results in a random sleep between **500 ms and 1500 ms** each time.
+
+### Implementations
+
+| Platform | Method | Description |
+|----------|--------|-------------|
+| **Linux** | `generic_linux` | Uses `nanosleep()` |
+| **Linux** | `timer_linux` | Uses `timerfd` |
+| **Windows** | `generic_windows` | Uses `std::this_thread::sleep_for` |
+| **Windows** | `timer_windows` | Uses `CreateWaitableTimer` |
+
+Select the implementation at build time with `-S`:
+
+```bash
+# Windows examples
+python build.py -S generic_windows
+python build.py -S timer_windows
+
+# Linux examples
+python3 build.py -S generic_linux
+python3 build.py -S timer_linux
+```
+
+
 ---
 
 ## Bypass Methods
@@ -100,55 +178,6 @@ Uses `--ozone-platform=headless` to remove the GUI while still respecting Chromi
 <img width="1713" height="1011" alt="ozone_demo" src="https://github.com/user-attachments/assets/87965240-85dd-41c4-952d-7865f659ab52" />
 
 ---
-
-## Execution Spawning Methods (Launchers)
-
-### Windows
-
-#### ShellExecuteEx
-Launches the browser through the Windows Shell ([ShellExecuteEx](https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecuteexa) with the "open" verb), mimicking the Explorer double-click flow.
-
-#### CreateProcessW
-Uses [CreateProcessW](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw) to start the browser process.
-
-### Linux
-
-#### posix_spawn
-Spawns the process with [posix_spawn](https://man7.org/linux/man-pages/man3/posix_spawn.3.html).
-
-```c
-int posix_spawn(pid_t *restrict pid, const char *restrict path,
-                const posix_spawn_file_actions_t *restrict file_actions,
-                const posix_spawnattr_t *restrict attrp,
-                char *const argv[restrict],
-                char *const envp[restrict]);
-```
-
----
-
-## Termination Methods
-
-### Windows
-
-#### TerminateProcess
-Uses [TerminateProcess](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminateprocess) to kill the spawned Chromium process.
-
-```c
-BOOL TerminateProcess(
-  [in] HANDLE hProcess,
-  [in] UINT uExitCode
-);
-```
-
-### Linux
-
-#### kill
-Sends `SIGKILL` using the Linux [kill](https://man7.org/linux/man-pages/man2/kill.2.html) function.
-
-```c
-#include <signal.h>
-int kill(pid_t pid, int sig);
-```
 
 ## To-Do
 - Make the output zip file an argument
