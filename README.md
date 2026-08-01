@@ -21,10 +21,10 @@ The build.py script acts as a compile-time modular injector. It auto-detects the
 ## Quick Links
 - [Blog Series](#blog-series)
 - [Build Requirements](#build-requirements)
+- [Bypass Methods](#bypass-methods)
 - [Launchers](#execution-spawning-methods-launchers)
 - [Termination Methods](#termination-methods)
 - [Sleep Settings](#sleep-settings)
-- [Bypass Methods](#bypass-methods)
 - [Roadmap](#roadmap)
 
 ---
@@ -80,6 +80,34 @@ python3 --version
 cmake --version
 g++ --version
 ```
+
+
+## Bypass Methods
+
+### CDP
+
+Utilizes the `--remote-debugging-port` flag to enable remote control of Chromium browsers, then uses the `file://` protocol to open local database files.
+
+<img width="1891" height="946" alt="cdp_demo" src="https://github.com/user-attachments/assets/55f36859-fec0-4862-bdde-e9acc242ea7e" />
+
+### windowspos (Windows)
+
+Launches Chromium off-screen using `--window-position=-32000,-32000`. Because the targeted files are non-renderable, Chromium automatically downloads them to the user's Downloads folder.
+
+**Example:**
+```bash
+profile-stealer.exe windowspos --profile "C:\Users\drew\AppData\Local\Google\Chrome\User\Default" --kill --launch edge
+```
+
+<img width="1694" height="930" alt="window_position" src="https://github.com/user-attachments/assets/78649329-152c-49fe-bd07-cbf3aed11aa3" />
+
+### ozone (Linux)
+
+Uses `--ozone-platform=headless` to remove the GUI while still respecting Chromium's process singleton. This allows multiple file requests to be routed through a single browser process.
+
+<img width="1713" height="1011" alt="ozone_demo" src="https://github.com/user-attachments/assets/87965240-85dd-41c4-952d-7865f659ab52" />
+
+---
 
 ## Execution Spawning Methods (Launchers)
 
@@ -157,35 +185,6 @@ python build.py -S timer_windows
 python3 build.py -S generic_linux
 python3 build.py -S timer_linux
 ```
-
-
----
-
-## Bypass Methods
-
-### CDP
-
-Utilizes the `--remote-debugging-port` flag to enable remote control of Chromium browsers, then uses the `file://` protocol to open local database files.
-
-<img width="1891" height="946" alt="cdp_demo" src="https://github.com/user-attachments/assets/55f36859-fec0-4862-bdde-e9acc242ea7e" />
-
-### windowspos (Windows)
-
-Launches Chromium off-screen using `--window-position=-32000,-32000`. Because the targeted files are non-renderable, Chromium automatically downloads them to the user's Downloads folder.
-
-**Example:**
-```bash
-profile-stealer.exe windowspos --profile "C:\Users\drew\AppData\Local\Google\Chrome\User\Default" --kill --launch edge
-```
-
-<img width="1694" height="930" alt="window_position" src="https://github.com/user-attachments/assets/78649329-152c-49fe-bd07-cbf3aed11aa3" />
-
-### ozone (Linux)
-
-Uses `--ozone-platform=headless` to remove the GUI while still respecting Chromium's process singleton. This allows multiple file requests to be routed through a single browser process.
-
-<img width="1713" height="1011" alt="ozone_demo" src="https://github.com/user-attachments/assets/87965240-85dd-41c4-952d-7865f659ab52" />
-
 ---
 
 ## Roadmap
