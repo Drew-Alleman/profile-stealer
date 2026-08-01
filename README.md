@@ -187,3 +187,4 @@ python3 build.py -S timer_linux
 ## Roadmap
 - [ ] Make the output zip path configurable
 - [ ] Allow custom X,Y coordinates for the `windowspos` bypass
+- [ ] Allow custom chromium downloads folder option for non-default use cases
