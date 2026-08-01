@@ -37,7 +37,6 @@ This tool is part of a malware development series:
 4. Windows Off-Screen Technique for Stealing Chromium Profiles
 5. Extracting Chromium Profiles with the Chrome DevTools Protocol (CDP)
 6. Linux Ozone Technique – Headless Chromium Without Process Explosion
-7. Reducing Static Strings on Profile-Stealer to Evade AV and EDR Signatures
 
 ---
 
