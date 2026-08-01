@@ -179,6 +179,6 @@ Uses `--ozone-platform=headless` to remove the GUI while still respecting Chromi
 
 ---
 
-## To-Do
-- Make the output zip file an argument
-- For the windows position bypass allow the end user to specify the X,Y cords.
+## Roadmap
+- [ ] Make the output zip path configurable
+- [ ] Allow custom X,Y coordinates for the `windowspos` bypass
