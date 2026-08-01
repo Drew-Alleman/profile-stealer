@@ -149,3 +149,7 @@ Sends `SIGKILL` using the Linux [kill](https://man7.org/linux/man-pages/man2/kil
 #include <signal.h>
 int kill(pid_t pid, int sig);
 ```
+
+## To-Do
+- Make the output zip file an argument
+- For the windows position bypass allow the end user to specify the X,Y cords.
