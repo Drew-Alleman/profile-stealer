@@ -1,4 +1,12 @@
 # profile-stealer
+> Disclaimer
+This project is provided strictly for educational and research purposes only.
+It is intended to help security researchers, red team operators, and defensive teams understand evasion techniques and improve detection capabilities.
+You may not use this software to access, extract data from, or interfere with any system you do not own or do not have explicit written permission to test.
+Unauthorized use of this tool is illegal and may result in criminal and civil liability. The author does not condone or support any malicious or illegal activity.
+This software is provided "as is", without warranty of any kind. The author accepts no responsibility or liability for any damages, legal consequences, or misuse resulting from the use of this project.
+By downloading, using, or modifying this code, you agree that you are solely responsible for ensuring your actions comply with all applicable laws and regulations.
+
 Chromium-based browsers store unencrypted user data—such as browsing history and autofill entries—in local SQLite databases. While directly accessing or copying these files from an untrusted process typically triggers security alerts, Profile Stealer abuses native Chromium features to download database files through the legitimate, trusted browser process, aiding in the bypass of AV and EDR detections.
 
 This repository utilizes the build.py script to act as the automated build manager and compile-time modular injector for the profile-stealer framework. It auto-detects the host operating system and dynamically swaps concrete backend implementations into source header files prior to compilation. This allows for the customization of the following options at build time:
