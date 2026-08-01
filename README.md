@@ -28,6 +28,10 @@ we can utilize the `--remote-debugging-port` flag to enable chromium browsers to
 
 ### windowspos
 We can launch multiple headless Chromium browsers pointing to the local database files. Because these files are in a non-displayable format, they will be downloaded to the user's local Downloads directory.
+
+Example Usage: `profile-stealer.exe windowspos --profile "C:\Users\drew\AppData\Local\Google\Chrome\User\Default" --kill --launch edge`
+
+
 <img width="1694" height="930" alt="window_position" src="https://github.com/user-attachments/assets/78649329-152c-49fe-bd07-cbf3aed11aa3" />
 
 ### ozone
