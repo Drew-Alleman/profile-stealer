@@ -8,13 +8,13 @@ This repository utilizes the build.py script to act as the automated build manag
 - Sleep Timers & Jitter: Customizable sleep intervals and random timing variation to evade fixed-rate behavioral heuristics
 
 Additionally this tool has been apart of my malware development series on my blog:
-  1. Malware Development - Build-Time Polymorphism Designing Modular, EDR-Evasive Process Primitives
-  2. Malware Development - Build-Time Backend Selection with Python
-  3. Malware Development - Building the Bypass Structure'
-  4. Malware Development - Extracting Browser Profile Databases via Window Position Abuse
-  5. Malware Development - Building the CDP Bypass
-  6. Malware Development - Building the Ozone Bypass
-  7. Malware Development - Static String Encryption
+  1. Build-Time Polymorphism Designing Modular, EDR-Evasive Process Primitives
+  2. Build-Time Backend Selection with Python
+  3. Building the Bypass Structure'
+  4. Extracting Browser Profile Databases via Window Position Abuse
+  5. Building the CDP Bypass
+  6. Building the Ozone Bypass
+  7. Static String Encryption
 
 ## Build Requirements
 ### Linux
