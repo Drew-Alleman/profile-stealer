@@ -1,5 +1,5 @@
 # profile-stealer
-> Disclaimer
+> **Legal Disclaimer: **
 This project is provided strictly for educational and research purposes only.
 It is intended to help security researchers, red team operators, and defensive teams understand evasion techniques and improve detection capabilities.
 You may not use this software to access, extract data from, or interfere with any system you do not own or do not have explicit written permission to test.
