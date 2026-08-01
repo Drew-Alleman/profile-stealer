@@ -117,7 +117,7 @@ inline void BypassMethod::setup(CLI::App& cli, Context& ctx)
         CRYPT("remote debugging port to connect to")
     )
         ->check(CLI::Range(0, 65535))
-        ->default_val(0);
+        ->default_val(9222);
 
     sub->add_option(
         CRYPT("-i,--ip-address"),
