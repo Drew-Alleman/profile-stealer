@@ -25,9 +25,39 @@ Additionally this tool has been apart of my malware development series on my blo
   7. Reducing Static Strings on Profile-Stealer to Evade AV and EDR Signatures
 
 ## Build Requirements
-### Linux
-### Windows
+### Common Requirements
+- **Python** 3.8 or newer (3.10+ recommended)
+- **CMake** (must be available on `PATH`)
+- Full project source (`src/`, `methods/`, `CMakeLists.txt`, etc.)
+> No additional Python packages are required.
+---
 
+### Windows
+- **C++ Compiler**: Visual Studio 2019/2022 (Community is fine) **or** Build Tools for Visual Studio  
+  with the **"Desktop development with C++"** workload
+
+**Quick check:**
+```powershell
+python --version
+cmake --version
+```
+
+### Linux
+- C++ Compiler: g++ or clang++ (C++17 support)
+- Build Tools: build-essential (Debian/Ubuntu) or equivalent
+
+**Quick install (Debian/Ubuntu):**
+
+```Bash
+sudo apt update
+sudo apt install python3 cmake build-essential
+```
+**Quick check:**
+```Bash
+python3 --version
+cmake --version
+g++ --version
+```
 ## Bypass Methods
 ### CDP
 we can utilize the `--remote-debugging-port` flag to enable chromium browsers to be controlled remotely then utilize the feature to open local files using the `file://` indicator.
