@@ -8,13 +8,13 @@ This repository utilizes the build.py script to act as the automated build manag
 - Sleep Timers & Jitter: Customizable sleep intervals and random timing variation to evade fixed-rate behavioral heuristics
 
 Additionally this tool has been apart of my malware development series on my blog:
-  1. Build-Time Polymorphism Designing Modular, EDR-Evasive Process Primitives
-  2. Build-Time Backend Selection with Python
-  3. Building the Bypass Structure'
-  4. Extracting Browser Profile Databases via Window Position Abuse
-  5. Building the CDP Bypass
-  6. Building the Ozone Bypass
-  7. Static String Encryption
+  1. Building an EDR-Evasive Chromium Profile Stealer - Architecture & Modular Backends for EDR Evasion
+  2. Implementing a Build-Time Backend Selection System
+  3. Designing a Reusable Architecture for Bypass Methods
+  4. Windows Off-Screen Technique for Stealing Chromium Profiles
+  5. Extracting Chromium Profiles with the Chrome DevTools Protocol (CDP)
+  6. Linux Ozone Technique - Headless Chromium Without Process Explosion
+  7. Reducing Static Strings on Profile-Stealer to Evade AV and EDR Signatures
 
 ## Build Requirements
 ### Linux
