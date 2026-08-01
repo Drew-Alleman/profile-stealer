@@ -11,9 +11,19 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 
+# CMAKE output folder from build.py
+build/*
+
 # CLion
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #cmake-build-*
+
+# Exported ZIP files by profile-stealer
+*.zip
+
+# Raw executables
+profile-stealer.exe
+profile-stealer
