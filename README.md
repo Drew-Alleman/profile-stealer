@@ -18,6 +18,15 @@ The build.py script acts as a compile-time modular injector. It auto-detects the
 - Process terminators
 - Sleep timing & jitter, and implementation
 
+## Quick Links
+- [Blog Series](#blog-series)
+- [Build Requirements](#build-requirements)
+- [Launchers](#execution-spawning-methods-launchers)
+- [Termination Methods](#termination-methods)
+- [Sleep Settings](#sleep-settings)
+- [Bypass Methods](#bypass-methods)
+- [Roadmap](#roadmap)
+
 ---
 
 ## Blog Series
