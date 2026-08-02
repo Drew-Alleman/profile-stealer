@@ -19,7 +19,7 @@ from pathlib import Path
 METHODS = {
     "bypass": {
         "cdp": "methods/bypass_methods/cdp.hpp",
-        "windowspos": "methods/bypass_methods/windowspos.hpp",
+        "windowpos": "methods/bypass_methods/windowpos.hpp",
         "ozone": "methods/bypass_methods/ozone.hpp",
     },
     "launcher": {
@@ -306,7 +306,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-B",
         "--bypass-method",
-        choices=["cdp", "windowspos", "ozone"],
+        choices=["cdp", "windowpos", "ozone"],
         default="cdp",
         help="Bypass method to use (default: %(default)s)",
     )
