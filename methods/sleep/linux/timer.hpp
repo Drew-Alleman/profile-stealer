@@ -29,7 +29,8 @@ inline void sleepMs(int sleepTime = SLEEP_MS) {
 
     // Block until the timer expires
     uint64_t expirations = 0;
-    read(tfd, &expirations, sizeof(expirations));
+    ssize_t n = read(tfd, &expirations, sizeof(expirations));
+    (void)n;
 
     close(tfd);
 }
