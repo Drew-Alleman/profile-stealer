@@ -1,0 +1,51 @@
+#include <iostream>
+#include <thread>
+#include <chrono>
+#include "cdp/browser.h"
+
+int main() {
+    cdp::Browser browser("127.0.0.1", 9222);
+
+    if (!browser.connect()) {
+        std::cerr << "[-] Failed to connect to Chrome\n";
+        return 1;
+    }
+
+    std::cout << "[+] Connected to Chrome\n";
+
+    // Grant camera permission (correct name is "video")
+    browser.grantPermissions({ "video" });
+
+    // List webcams
+    std::cout << "\n=== Available Webcams ===\n";
+    auto cams = browser.listWebcams();
+    if (cams && !cams.value().empty()) {
+        for (size_t i = 0; i < cams.value().size(); ++i) {
+            std::cout << "[" << i << "] " << cams.value()[i] << "\n";
+        }
+    }
+    else {
+        std::cout << "No webcams found or permission denied.\n";
+        return 1;
+    }
+
+    // === Save real JPEG photo ===
+    std::cout << "\n[+] Saving webcam photo to webcam_photo.jpg...\n";
+    auto result = browser.saveWebcamPhoto("webcam_photo.jpg");
+
+    if (result) {
+        std::cout << "[+] Successfully saved real JPEG: webcam_photo.jpg\n";
+    }
+    else {
+        std::cerr << "[-] Failed: " << result.error().message << "\n";
+    }
+
+    // Optional: run input tracker
+    std::cout << "\n[+] Starting mouse/input tracker for 15 seconds...\n";
+    browser.watchInput();
+    std::this_thread::sleep_for(std::chrono::seconds(15));
+    browser.stopInput();
+
+    std::cout << "\n[+] Done.\n";
+    return 0;
+}
