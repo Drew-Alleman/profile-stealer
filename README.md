@@ -114,7 +114,7 @@ Launches or connects to a Chromium browser instance using the following flags:
 <img width="1891" height="946" alt="cdp_demo" src="https://github.com/user-attachments/assets/55f36859-fec0-4862-bdde-e9acc242ea7e" />
 
 ### windowpos (Windows)
-Launches Chromium off-screen using `--window-position=-32000,-32000`. Because the targeted files are non-renderable, Chromium automatically downloads them to the user's Downloads folder.
+Launches Chromium off-screen using `--window-position=-32000,-32000`. Because the targeted files are non-renderable, Chromium automatically downloads them to the user's Downloads folder. **This does show the process running in the taskbar.**
 
 **Example:**
 ```bash
