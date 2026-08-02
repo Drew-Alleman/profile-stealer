@@ -57,8 +57,8 @@ class BuildManager:
         launcher_method: str,
         bypass_method: str,
         sleep_method: str,
-        sleep_ms: int = 2,
-        sleep_jitter: float = 25.0,
+        sleep_ms: int = 1,
+        sleep_jitter: float = 10.0,
     ) -> None:
         self.termination_method = termination_method
         self.launcher_method = launcher_method
