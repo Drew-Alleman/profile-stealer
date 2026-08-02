@@ -16,6 +16,30 @@ The build.py script acts as a compile-time modular injector. It auto-detects the
 - Process terminators
 - Sleep timing & jitter, and implementation
 
+```
+PS C:\Users\drew\final\profile-stealer> python .\build.py --help
+[*] Detected OS: Windows – only native methods available
+usage: build.py [-h] [-T {TerminateProcess}] [-L {ShellExecuteEx,CreateProcessW}] [-S {generic_windows,timer_windows}]
+                [-B {cdp,windowspos,ozone}] [-M SLEEP_MS] [-J SLEEP_JITTER]
+
+Builds and compiles with the selected runtime options
+
+options:
+  -h, --help            show this help message and exit
+  -T, --termination-method {TerminateProcess}
+                        Method used to terminate processes (default: TerminateProcess)
+  -L, --launcher-method {ShellExecuteEx,CreateProcessW}
+                        Method used to launch processes (default: CreateProcessW)
+  -S, --sleep-method {generic_windows,timer_windows}
+                        Sleep method to use (default: generic_windows)
+  -B, --bypass-method {cdp,windowspos,ozone}
+                        Bypass method to use (default: cdp)
+  -M, --sleep-ms SLEEP_MS
+                        Base sleep duration in ms written to sleep_common.h (default: 3300)
+  -J, --sleep-jitter SLEEP_JITTER
+                        Sleep jitter percentage written to sleep_common.h (default: 25.0)
+```
+
 ## Quick Links
 - [Blog Series](#blog-series)
 - [Build Requirements](#build-requirements)
@@ -37,7 +61,6 @@ This tool is part of a malware development series:
 4. Windows Off-Screen Technique for Stealing Chromium Profiles
 5. Extracting Chromium Profiles with the Chrome DevTools Protocol (CDP)
 6. Linux Ozone Technique – Headless Chromium Without Process Explosion
-7. Reducing Static Strings on Profile-Stealer to Evade AV and EDR Signatures
 
 ---
 
@@ -83,13 +106,14 @@ g++ --version
 ## Bypass Methods
 
 ### CDP
-
-Utilizes the `--remote-debugging-port` flag to enable remote control of Chromium browsers, then uses the `file://` protocol to open local database files.
+Launches or connects to a Chromium browser instance using the following flags:
+-  `--remote-debugging-port`: Enables the remote debugging service (this allows us to control the browser)
+-  `--headless=new`: Hides the GUI from the end user
+-  `--allow-file-access-from-files`: Allows us to send network requests to read local files
 
 <img width="1891" height="946" alt="cdp_demo" src="https://github.com/user-attachments/assets/55f36859-fec0-4862-bdde-e9acc242ea7e" />
 
 ### windowspos (Windows)
-
 Launches Chromium off-screen using `--window-position=-32000,-32000`. Because the targeted files are non-renderable, Chromium automatically downloads them to the user's Downloads folder.
 
 **Example:**
@@ -188,3 +212,4 @@ python3 build.py -S timer_linux
 ## Roadmap
 - [ ] Make the output zip path configurable
 - [ ] Allow custom X,Y coordinates for the `windowspos` bypass
+- [ ] Allow custom chromium downloads folder option for non-default use cases
