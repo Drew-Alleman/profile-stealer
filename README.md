@@ -55,12 +55,12 @@ options:
 
 This tool is part of a malware development series:
 
-1. Building an EDR-Evasive Chromium Profile Stealer – Architecture & Modular Backends for EDR Evasion
-2. Implementing a Build-Time Backend Selection System
-3. Designing a Reusable Architecture for Bypass Methods
-4. Windows Off-Screen Technique for Stealing Chromium Profiles
-5. Extracting Chromium Profiles with the Chrome DevTools Protocol (CDP)
-6. Linux Ozone Technique – Headless Chromium Without Process Explosion
+1. [Building an EDR-Evasive Chromium Profile Stealer – Architecture & Modular Backends for EDR Evasion](https://drewalleman.xyz/red-teaming/malware-development/2026/08/01/architecture-and-modular-backends-for-edr-evasion)
+2. [Implementing a Build-Time Backend Selection System](https://drewalleman.xyz/red-teaming/malware-development/2026/08/01/implementing-a-build-time-backend-selection-system)
+3. [Designing a Reusable Architecture for Bypass Methods](https://drewalleman.xyz/red-teaming/malware-development/2026/08/01/designing-a-reusable-architecture-for-bypass-methods)
+4. [Windows Off-Screen Technique for Stealing Chromium Profiles](https://drewalleman.xyz/red-teaming/malware-development/2026/08/01/windows-off-screen-technique-for-stealing-chromium-profiles)
+5. [Extracting Chromium Profiles with the Chrome DevTools Protocol (CDP)](https://drewalleman.xyz/red-teaming/malware-development/2026/08/01/extracting-chromium-profiles-with-cdp)
+6. [Linux Ozone Technique – Headless Chromium Without Process Explosion](https://drewalleman.xyz/red-teaming/malware-development/2026/08/01/linux-ozone-technique)
 
 ---
 
