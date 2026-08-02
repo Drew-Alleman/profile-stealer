@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Build manager: backup src/ → install selected method headers → write sleep
-constants → cmake build → restore src/.
+Build manager: check prerequisites → backup src/ → install selected method headers 
+→ write sleep constants → cmake build → restore src/.
 """
 from __future__ import annotations
 import argparse
@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+
 # ---------------------------------------------------------------------------
 # Method / target maps
 # ---------------------------------------------------------------------------
@@ -38,12 +39,14 @@ METHODS = {
         "timer_linux": "methods/sleep/linux/timer.hpp",
     },
 }
+
 TARGETS = {
     "bypass": "src/bypass_methods/bypass.hpp",
     "launcher": "src/launchers/launcher.hpp",
     "terminator": "src/terminators/terminator.hpp",
     "sleep": "src/sleep/sleep.hpp",
 }
+
 # ---------------------------------------------------------------------------
 # BuildManager
 # ---------------------------------------------------------------------------
@@ -64,6 +67,22 @@ class BuildManager:
         self.sleep_ms = sleep_ms
         self.sleep_jitter = sleep_jitter
         self.backup_path: Path | None = None
+
+    # ------------------------------------------------------------------
+    # Prerequisites Check
+    # ------------------------------------------------------------------
+    def check_prerequisites(self) -> bool:
+        """Verifies required tools exist before performing backup or file ops."""
+        print("[*] Checking build prerequisites...")
+        cmake_path = shutil.which("cmake")
+        if not cmake_path:
+            print("[-] Prerequisites check failed: 'cmake' was not found on PATH.")
+            print("    Please install CMake or ensure it is accessible in your environment.")
+            return False
+        
+        print(f"[+] Found cmake: {cmake_path}")
+        return True
+
     # ------------------------------------------------------------------
     # Backup / restore
     # ------------------------------------------------------------------
@@ -73,10 +92,12 @@ class BuildManager:
         if not src_dir.is_dir():
             print("[-] src/ directory not found")
             return False
+
         # Proactively clean any leftover from a previous crashed run
         pre = cwd / "src.pre_restore"
         if pre.exists():
             shutil.rmtree(pre, ignore_errors=True)
+
         backup_root = None
         try:
             backup_root = Path(tempfile.mkdtemp(prefix="backup_"))
@@ -87,26 +108,32 @@ class BuildManager:
             if backup_root is not None:
                 shutil.rmtree(backup_root, ignore_errors=True)
             return False
+
         self.backup_path = backup_root
         print(f"[+] Source backed up to: {backup_root}")
         return True
+
     def restore_source(self) -> bool:
         if self.backup_path is None or not self.backup_path.is_dir():
             print("[-] No backup available to restore")
             return False
+
         backed_src = self.backup_path / "src"
         if not backed_src.is_dir():
             print("[-] Backed-up src/ is missing")
             return False
+
         cwd = Path.cwd()
         current_src = cwd / "src"
         displaced_src = None
+
         try:
             if current_src.exists():
                 displaced_src = current_src.with_name(current_src.name + ".pre_restore")
                 if displaced_src.exists():
                     shutil.rmtree(displaced_src, ignore_errors=True)
                 current_src.rename(displaced_src)
+
             shutil.copytree(backed_src, current_src)
         except (OSError, shutil.Error) as e:
             print(f"[-] Restore failed: {e}")
@@ -117,13 +144,16 @@ class BuildManager:
                 try:
                     displaced_src.rename(current_src)
                 except OSError:
-                    pass # best-effort
+                    pass  # best-effort
             return False
+
         # Success path
         if displaced_src is not None and displaced_src.exists():
             shutil.rmtree(displaced_src, ignore_errors=True)
+
         print(f"[+] Source restored from: {self.backup_path}")
         return True
+
     # ------------------------------------------------------------------
     # Source adjustments
     # ------------------------------------------------------------------
@@ -131,35 +161,43 @@ class BuildManager:
         try:
             cwd = Path.cwd()
             print(f"[*] Working directory: {cwd}")
+
             selections = {
                 "bypass": self.bypass_method.lower(),
                 "launcher": self.launcher_method.lower(),
                 "terminator": self.termination_method.lower(),
                 "sleep": self.sleep_method.lower(),
             }
+
             for category, method_key in selections.items():
                 if category not in METHODS or method_key not in METHODS[category]:
                     print(f"[-] Unknown {category} method: {method_key}")
                     return False
+
                 src_file = cwd / METHODS[category][method_key]
                 dst_file = cwd / TARGETS[category]
+
                 print(f"\n[*] Processing {category} ({method_key})")
                 print(f" Source : {src_file}")
                 print(f" Target : {dst_file}")
+
                 if not src_file.is_file():
                     print(f"[-] Implementation file not found: {src_file}")
                     return False
+
                 shutil.copy2(src_file, dst_file)
                 if dst_file.is_file() and dst_file.stat().st_size == src_file.stat().st_size:
                     print(f"[+] Successfully overwrote → {dst_file}")
                 else:
                     print(f"[-] Copy appeared to fail for {dst_file}")
                     return False
+
             print("\n[+] All method files installed successfully")
             return True
         except (OSError, shutil.Error) as e:
             print(f"[-] Failed to adjust source: {e}")
             return False
+
     def write_sleep_common(self) -> bool:
         path = Path("src/sleep/sleep_common.h")
         content = (
@@ -174,8 +212,10 @@ class BuildManager:
         except OSError as e:
             print(f"[-] Failed to write sleep_common.h: {e}")
             return False
+
         print(f"[+] Wrote {path} → SLEEP_MS={self.sleep_ms}, SLEEP_JITTER={self.sleep_jitter}")
         return True
+
     # ------------------------------------------------------------------
     # Build
     # ------------------------------------------------------------------
@@ -205,6 +245,7 @@ class BuildManager:
         except FileNotFoundError:
             print("[-] cmake is not installed or not on PATH")
             return False
+
     def _clean(self, build_dir: Path) -> None:
         if build_dir.exists():
             print(f"[+] Removing previous {build_dir}/ directory...")
@@ -218,10 +259,12 @@ class BuildManager:
                 )
                 raise
         build_dir.mkdir(parents=True, exist_ok=True)
+
     @staticmethod
     def _clear_readonly_and_retry(func, path, exc) -> None:
         os.chmod(path, stat.S_IWRITE)
         func(path)
+
     def _run_step(self, label: str, cmd: list[str], timeout: int = 1800) -> bool:
         print(f"[+] Running {label}: {' '.join(cmd)}")
         result = subprocess.run(cmd, timeout=timeout)
@@ -229,41 +272,54 @@ class BuildManager:
             print(f"[-] {label} failed with exit code {result.returncode}")
             return False
         return True
+
     # ------------------------------------------------------------------
     # Orchestration
     # ------------------------------------------------------------------
     def start(self) -> None:
+        # Check tool prerequisites before allocating temp dirs or writing headers
+        if not self.check_prerequisites():
+            return
+
         try:
             if not self.backup_source():
-                print("[-] failed to backup the original source code")
+                print("[-] Failed to backup the original source code")
                 return
+
             if not self.adjust_source():
-                print("[-] failed to adjust source code for user specified options")
+                print("[-] Failed to adjust source code for user specified options")
                 return
+
             if not self.write_sleep_common():
-                print("[-] failed to adjust sleep settings")
+                print("[-] Failed to adjust sleep settings")
                 return
+
             print("[*] Compiling source code...")
             if not self.build():
                 print("[-] Failed to compile source code")
                 return
+
             print("[+] Compiled source code")
         except KeyboardInterrupt:
-            print("[-] CTRL+C detected; aborting...")
+            print("\n[-] CTRL+C detected; aborting...")
         finally:
-            try:
-                self.restore_source() # we always try
-            finally:
-                # Always clean the temp backup, even if restore failed or raised
-                if self.backup_path is not None and self.backup_path.exists():
-                    shutil.rmtree(self.backup_path, ignore_errors=True)
-                    self.backup_path = None
+            # Only attempt restore if a backup was actually generated
+            if self.backup_path is not None:
+                try:
+                    self.restore_source()
+                finally:
+                    if self.backup_path.exists():
+                        shutil.rmtree(self.backup_path, ignore_errors=True)
+                        self.backup_path = None
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 def parse_args() -> argparse.Namespace:
     system = platform.system().lower()
     is_linux = system == "linux"
+
     if is_linux:
         launcher_choices = ["posix_spawn"]
         term_choices = ["sigkill"]
@@ -278,7 +334,9 @@ def parse_args() -> argparse.Namespace:
         default_launcher = "CreateProcessW"
         default_term = "TerminateProcess"
         default_sleep = "generic_windows"
+
     print(f"[*] Detected OS: {platform.system()} – only native methods available")
+
     parser = argparse.ArgumentParser(
         description="Builds and compiles with the selected runtime options"
     )
@@ -325,6 +383,8 @@ def parse_args() -> argparse.Namespace:
         help="Sleep jitter percentage written to sleep_common.h (default: %(default)s)",
     )
     return parser.parse_args()
+
+
 def main() -> None:
     args = parse_args()
     manager = BuildManager(
@@ -336,5 +396,7 @@ def main() -> None:
         sleep_jitter=args.sleep_jitter,
     )
     manager.start()
+
+
 if __name__ == "__main__":
     main()
