@@ -8,7 +8,7 @@ inline void sleepMs(int sleepTime = SLEEP_MS) {
     if (sleepTime <= 0) return;
 
     double delay = sleepTime;
-    if (JITTER > 0) {
+    if (SLEEP_JITTER > 0) {
         static thread_local std::mt19937 rng{ std::random_device{}() };
         std::uniform_real_distribution<double> dist(-SLEEP_JITTER / 100.0, SLEEP_JITTER / 100.0);
         delay += delay * dist(rng);
