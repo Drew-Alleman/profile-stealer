@@ -273,6 +273,36 @@ class BuildManager:
             return False
         return True
 
+    def move_executable(self) -> bool:
+            cwd = Path.cwd()
+            system = platform.system().lower()
+
+            if system == "linux":
+                src = cwd / "build" / "bin" / "profile-stealer"
+            else:
+                src = cwd / "build" / "bin" / "Release" / "profile-stealer.exe"
+
+            if not src.is_file():
+                print(f"[-] Compiled executable not found at: {src}")
+                return False
+
+            dst = cwd / src.name
+            try:
+                # Overwrite existing binary if one is already in cwd
+                if dst.exists():
+                    dst.unlink()
+
+                shutil.move(src, dst)
+                print(f"[+] Moved executable to {dst}")
+                return True
+            except OSError as e:
+                print(f"[-] Failed to move executable: {e}")
+                return False
+
+
+
+
+
     # ------------------------------------------------------------------
     # Orchestration
     # ------------------------------------------------------------------
@@ -300,6 +330,14 @@ class BuildManager:
                 return
 
             print("[+] Compiled source code")
+
+
+            if not self.move_executable():
+                print("[-] Failed to move executable to current working directory")
+                return
+
+            print("[+] Executable was moved to the current working directory")
+
         except KeyboardInterrupt:
             print("\n[-] CTRL+C detected; aborting...")
         finally:
