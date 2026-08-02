@@ -11,7 +11,7 @@
 Chromium-based browsers store unencrypted user data (history, autofill, etc.) in local SQLite databases. Directly accessing these files from an untrusted process often triggers AV/EDR alerts. profile-stealer routes the download through a legitimate Chromium process so the activity appears expected.
 
 The build.py script acts as a compile-time modular injector. It auto-detects the OS and swaps in the selected backends before compilation, allowing you to customize:
-- Bypass methods (CDP, windowspos, ozone)
+- Bypass methods (CDP, windowpos, ozone)
 - Process launchers
 - Process terminators
 - Sleep timing & jitter, and implementation
@@ -20,7 +20,7 @@ The build.py script acts as a compile-time modular injector. It auto-detects the
 PS C:\Users\drew\final\profile-stealer> python .\build.py --help
 [*] Detected OS: Windows – only native methods available
 usage: build.py [-h] [-T {TerminateProcess}] [-L {ShellExecuteEx,CreateProcessW}] [-S {generic_windows,timer_windows}]
-                [-B {cdp,windowspos,ozone}] [-M SLEEP_MS] [-J SLEEP_JITTER]
+                [-B {cdp,windowpos,ozone}] [-M SLEEP_MS] [-J SLEEP_JITTER]
 
 Builds and compiles with the selected runtime options
 
@@ -32,7 +32,7 @@ options:
                         Method used to launch processes (default: CreateProcessW)
   -S, --sleep-method {generic_windows,timer_windows}
                         Sleep method to use (default: generic_windows)
-  -B, --bypass-method {cdp,windowspos,ozone}
+  -B, --bypass-method {cdp,windowpos,ozone}
                         Bypass method to use (default: cdp)
   -M, --sleep-ms SLEEP_MS
                         Base sleep duration in ms written to sleep_common.h (default: 3300)
@@ -113,12 +113,12 @@ Launches or connects to a Chromium browser instance using the following flags:
 
 <img width="1891" height="946" alt="cdp_demo" src="https://github.com/user-attachments/assets/55f36859-fec0-4862-bdde-e9acc242ea7e" />
 
-### windowspos (Windows)
+### windowpos (Windows)
 Launches Chromium off-screen using `--window-position=-32000,-32000`. Because the targeted files are non-renderable, Chromium automatically downloads them to the user's Downloads folder.
 
 **Example:**
 ```bash
-profile-stealer.exe windowspos --profile "C:\Users\drew\AppData\Local\Google\Chrome\User\Default" --kill --launch edge
+profile-stealer.exe windowpos --profile "C:\Users\drew\AppData\Local\Google\Chrome\User\Default" --kill --launch edge
 ```
 
 <img width="1694" height="930" alt="window_position" src="https://github.com/user-attachments/assets/78649329-152c-49fe-bd07-cbf3aed11aa3" />
@@ -211,5 +211,5 @@ python3 build.py -S timer_linux
 
 ## Roadmap
 - [ ] Make the output zip path configurable
-- [ ] Allow custom X,Y coordinates for the `windowspos` bypass
+- [ ] Allow custom X,Y coordinates for the `windowpos` bypass
 - [ ] Allow custom chromium downloads folder option for non-default use cases
